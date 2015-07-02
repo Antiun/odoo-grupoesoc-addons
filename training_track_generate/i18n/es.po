@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0-20150514\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-01 12:29+0100\n"
-"PO-Revision-Date: 2015-07-01 12:30+0100\n"
+"POT-Creation-Date: 2015-06-22 11:38+0100\n"
+"PO-Revision-Date: 2015-06-22 11:40+0100\n"
 "Last-Translator: Jairo Llopis <j.llopis@grupoesoc.es>\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -79,8 +79,8 @@ msgstr "Creado el"
 
 #. module: event_track_generate
 #: view:event_track_generate.generator:event_track_generate.generator_view_form
-msgid "Dates and event data"
-msgstr "Fechas y datos del evento"
+msgid "Dates"
+msgstr "Fechas"
 
 #. module: event_track_generate
 #: field:event_track_generate.generator,delete_existing_tracks:0
@@ -144,23 +144,14 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: event_track_generate
-#: field:event_track_generate.generator,location_id:0
-msgid "Location"
-msgstr "Localización"
-
-#. module: event_track_generate
 #: help:event_track_generate.generator,adjust_end_time:0
 msgid "Make event's end time match the end of the last track."
-msgstr ""
-"Hacer que la hora de finalización del evento coincida con la de la última "
-"sesión."
+msgstr "Hacer que la hora de finalización del evento coincida con la de la última sesión."
 
 #. module: event_track_generate
 #: help:event_track_generate.generator,adjust_start_time:0
 msgid "Make event's start time match the start of the first track."
-msgstr ""
-"Hacer que la hora de comienzo del evento coincida con la de la primera "
-"sesión."
+msgstr "Hacer que la hora de comienzo del evento coincida con la de la primera sesión."
 
 #. module: event_track_generate
 #: field:event_track_generate.generator,mondays:0
@@ -188,11 +179,6 @@ msgid "Schedule"
 msgstr "Horario"
 
 #. module: event_track_generate
-#: field:event_track_generate.generator,speaker_ids:0
-msgid "Speakers"
-msgstr "Ponentes"
-
-#. module: event_track_generate
 #: field:event_track_generate.generator,start_time:0
 msgid "Start time"
 msgstr "Hora de comienzo"
@@ -201,11 +187,6 @@ msgstr "Hora de comienzo"
 #: field:event_track_generate.generator,sundays:0
 msgid "Sundays"
 msgstr "Domingos"
-
-#. module: event_track_generate
-#: field:event_track_generate.generator,tag_ids:0
-msgid "Tags"
-msgstr "Etiquetas"
 
 #. module: event_track_generate
 #: field:event_track_generate.generator,thursdays:0
@@ -241,6 +222,3 @@ msgstr "Días de la semana"
 #: view:event_track_generate.generator:event_track_generate.generator_view_form
 msgid "or"
 msgstr "o"
-
-#~ msgid "Dates"
-#~ msgstr "Fechas"

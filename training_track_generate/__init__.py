@@ -16,18 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-{
-    "name": "Generate Event Tracks",
-    "version": "2.0.0",
-    "category": "Project",
-    "author": "Grupo ESOC",
-    "license": "AGPL-3",
-    "website": "http://www.grupoesoc.es",
-    "summary": "Insert automatically event tracks",
-    "depends": [
-        "website_event_track",
-    ],
-    "data": [
-        "views/event.xml",
-    ],
-}
+from . import models

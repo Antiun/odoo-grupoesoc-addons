@@ -71,16 +71,6 @@ action. Therefore, you can use also the events view to manage training groups,
 but the *Training* menu seems a more consistant place to manage training
 groups.
 
-Tutors
-------
-
-Tutors are specified for each training group.
-
-A tutor is a special teacher that oversees the whole group. Whenever a student
-has a doubt in a non-on-site class, they usually reach a tutor (via email,
-phone, etc.) to ask them. Also, tutors may actively review the students'
-progress. You can have as many tutors as you want for each training group.
-
 For further information, please visit:
 
 * https://github.com/grupoesoc/odoo-grupoesoc-addons

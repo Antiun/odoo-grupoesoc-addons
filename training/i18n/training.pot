@@ -293,11 +293,6 @@ msgid "Show only events considered training groups"
 msgstr ""
 
 #. module: training
-#: help:event.event,tutor_ids:0
-msgid "Teachers that are supposed to oversee every track. These will be available for students to ask them their doubts."
-msgstr ""
-
-#. module: training
 #: help:training.action_type,expected_duration_type_ids:0
 msgid "These types of hours are expected in this type of training action. For example, a training of type 'mixed' may expect hours of types 'on-site' and 'online'."
 msgstr ""
@@ -355,11 +350,6 @@ msgid "Training type"
 msgstr ""
 
 #. module: training
-#: field:event.event,tutor_ids:0
-msgid "Tutors"
-msgstr ""
-
-#. module: training
 #: view:training.action:training.action_search
 msgid "Type"
 msgstr ""
@@ -373,4 +363,3 @@ msgstr ""
 #: model:res.groups,name:training.user_group
 msgid "User"
 msgstr ""
-

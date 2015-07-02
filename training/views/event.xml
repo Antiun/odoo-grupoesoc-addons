@@ -32,11 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <page string="Training">
                     <group>
                         <field name="training_action_id"/>
-                        <field name="tutor_ids"
-                               widget="many2many_tags"
-                               attrs="{'invisible': [('training_action_id',
-                                                      '=',
-                                                      False)]}" />
                     </group>
                 </page>
             </xpath>

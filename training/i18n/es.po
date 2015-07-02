@@ -344,15 +344,6 @@ msgid "Show only events considered training groups"
 msgstr "Mostrar sólo los eventos considerados como grupos formativos"
 
 #. module: training
-#: help:event.event,tutor_ids:0
-msgid ""
-"Teachers that are supposed to oversee every track. These will be available "
-"for students to ask them their doubts."
-msgstr ""
-"Profesores que se supone que supervisarán todas las sesiones. Estarán "
-"disponibles para que los estudiantes les pregunten sus dudas."
-
-#. module: training
 #: help:training.action_type,expected_duration_type_ids:0
 msgid ""
 "These types of hours are expected in this type of training action. For "
@@ -413,11 +404,6 @@ msgstr "Grupos formativos"
 #: field:training.action,type_id:0
 msgid "Training type"
 msgstr "Tipo formativo"
-
-#. module: training
-#: field:event.event,tutor_ids:0
-msgid "Tutors"
-msgstr "Tutores"
 
 #. module: training
 #: view:training.action:training.action_search

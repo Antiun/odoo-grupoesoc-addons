@@ -46,6 +46,15 @@ class Generator(models.TransientModel):
         "Track title",
         required=True,
         help="Title that will be assigned to all created tracks.")
+    location_id = fields.Many2one("event.track.location", "Location")
+    speaker_ids = fields.Many2many(
+        "res.partner",
+        string="Speakers",
+        relation="event_track_generate_generator_speaker_ids")
+    tag_ids = fields.Many2many(
+        "event.track.tag",
+        string="Tags",
+        relation="event_track_generate_generator_tag_ids")
     mondays = fields.Boolean(help="Create tracks on Mondays.")
     tuesdays = fields.Boolean(help="Create tracks on Tuesdays.")
     wednesdays = fields.Boolean(help="Create tracks on Wednesdays.")
@@ -77,71 +86,27 @@ class Generator(models.TransientModel):
         self.end_time = self.start_time + self.duration
 
     @api.one
-    def generate_tracks(self):
+    def action_generate(self):
         """Generate event tracks according to received data."""
-        weekdays = (self.mondays,
-                    self.tuesdays,
-                    self.wednesdays,
-                    self.thursdays,
-                    self.fridays,
-                    self.saturdays,
-                    self.sundays)
-
         # You need at least one weekday
+        weekdays = self.weekdays()[0]
         if True not in weekdays:
             raise exceptions.NoWeekdaysError()
-
-        counter = 0
-        event_start = fields.Datetime.from_string(self.event_date_begin)
-        event_end = fields.Datetime.from_string(self.event_date_end)
-        duration_delta = timedelta(seconds=self.duration * 60 * 60)
-        day_delta = timedelta(days=1)
-        start_time = (datetime.min +
-                      timedelta(seconds=self.start_time * 60 * 60))
-
-        # Needed to manually fix timezone offset, for start_time
-        tzdiff = timezone(self.event_id.date_tz or
-                          self.env.context["tz"] or
-                          self.env.user.tz or
-                          "UTC").utcoffset(event_start)
 
         # Delete existing
         if self.delete_existing_tracks:
             self.event_id.track_ids.exists().unlink()
 
-        # Check that tracks fit between event start and end dates
-        current = event_start
-        while current <= event_end:
-            # Get start date and time with fixed timezone offset
-            current_start = datetime.combine(current.date(),
-                                             start_time.time()) - tzdiff
-            if current_start >= event_start:
-                current_end = current_start + duration_delta
-                if current_end <= event_end and weekdays[current.weekday()]:
-                    # Need string for the ORM
-                    current_start = fields.Datetime.to_string(current_start)
-
-                    # Check that no track exists with this data
-                    existing = self.env["event.track"].search(
-                        (("event_id", "=", self.event_id.id),
-                         ("date", "=", current_start),
-                         ("duration", "=", self.duration)))
-                    if not existing:
-                        # Create the track
-                        self.env["event.track"].create({
-                            "name": self.name,
-                            "event_id": self.event_id.id,
-                            "date": current_start,
-                            "duration": self.duration,
-                            "user_id": self.event_id.user_id.id,
-                            "website_published":
-                                self.publish_tracks_in_website})
-                        counter += 1
-
-            # Next day
-            current += day_delta
+        # Create new
+        self.generate_tracks()
 
         # Adjust event's dates
+        self.adjust_dates()
+
+    @api.one
+    def adjust_dates(self):
+        """Adjust event dates if asked to do so."""
+        # Cheek if the user wanted to adjust dates
         if self.event_id.track_ids.exists() and (self.adjust_start_time or
                                                  self.adjust_end_time):
             sorted_ = self.event_id.track_ids.sorted(lambda r: r.date)
@@ -155,3 +120,86 @@ class Generator(models.TransientModel):
                 self.event_id.date_end = fields.Datetime.to_string(
                     fields.Datetime.from_string(sorted_[-1].date) +
                     timedelta(seconds=sorted_[-1].duration * 60 * 60))
+
+    @api.one
+    def create_track(self, **values):
+        """Create a new track record with the provided values."""
+        data = {
+            "name": self.name,
+            "event_id": self.event_id.id,
+            "duration": self.duration,
+            "location_id": self.location_id.id,
+            "speaker_ids": [(6, False, self.speaker_ids.ids)],
+            "tag_ids": [(6, False, self.tag_ids.ids)],
+            "user_id": self.event_id.user_id.id,
+            "website_published": self.publish_tracks_in_website}
+        data.update(values)
+        return self.env["event.track"].create(data)
+
+    @api.one
+    def datetime_fields(self):
+        """Fields converted to Python's Datetime-based objects."""
+        result = {
+            "event_start": fields.Datetime.from_string(self.event_date_begin),
+            "event_end": fields.Datetime.from_string(self.event_date_end),
+            "duration_delta": timedelta(seconds=self.duration * 60 * 60),
+            "day_delta": timedelta(days=1),
+            "start_time":
+                datetime.min + timedelta(seconds=self.start_time * 60 * 60),
+        }
+
+        # Needed to manually fix timezone offset, for start_time
+        result["tzdiff"] = (timezone(self.event_id.date_tz or
+                                     self.env.context["tz"] or
+                                     self.env.user.tz or
+                                     "UTC")
+                            .utcoffset(result["event_start"]))
+        return result
+
+    @api.one
+    def existing_tracks(self, date):
+        """Return existing tracks that match some criteria."""
+        return self.env["event.track"].search(
+            (("event_id", "=", self.event_id.id),
+             ("date", "=", date),
+             ("duration", "=", self.duration)))
+
+    @api.one
+    def generate_tracks(self):
+        """Know which tracks must be generated and do it."""
+        counter = 0
+        dt = self.datetime_fields()[0]
+        weekdays = self.weekdays()[0]
+
+        # Check that tracks fit between event start and end dates
+        current = dt["event_start"]
+        while current <= dt["event_end"]:
+            # Get start date and time with fixed timezone offset
+            current_start = datetime.combine(
+                current.date(),
+                dt["start_time"].time()) - dt["tzdiff"]
+            if (current_start >= dt["event_start"] and
+                    weekdays[current.weekday()]):
+                current_end = current_start + dt["duration_delta"]
+                if current_end <= dt["event_end"]:
+                    # Need string for the ORM
+                    current_start = fields.Datetime.to_string(current_start)
+
+                    # Check that no track exists with this data
+                    if not self.existing_tracks(current_start)[0]:
+                        self.create_track(date=current_start)
+                        counter += 1
+
+            # Next day
+            current += dt["day_delta"]
+
+    @api.one
+    def weekdays(self):
+        """Sorted weekdays user selection."""
+        return (self.mondays,
+                self.tuesdays,
+                self.wednesdays,
+                self.thursdays,
+                self.fridays,
+                self.saturdays,
+                self.sundays)

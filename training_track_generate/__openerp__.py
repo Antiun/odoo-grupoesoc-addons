@@ -17,17 +17,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 {
-    "name": "Generate Event Tracks",
-    "version": "2.0.0",
+    "name": "Generate Training Tracks",
+    "version": "1.0.0",
     "category": "Project",
     "author": "Grupo ESOC",
     "license": "AGPL-3",
     "website": "http://www.grupoesoc.es",
-    "summary": "Insert automatically event tracks",
+    "auto_install": True,
+    "summary": "Insert automatically training tracks",
     "depends": [
-        "website_event_track",
+        "event_track_generate",
+        "training_track",
     ],
     "data": [
-        "views/event.xml",
+        "views/event_track_generate_generator_views.xml",
     ],
 }

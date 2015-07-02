@@ -169,8 +169,3 @@ class Event(models.Model):
         _D % "action",
         "Training action",
         help="Training action of this event, if it is a training group.")
-    tutor_ids = fields.Many2many(
-        "res.partner",
-        string="Tutors",
-        help="Teachers that are supposed to oversee every track. These will "
-             "be available for students to ask them their doubts.")

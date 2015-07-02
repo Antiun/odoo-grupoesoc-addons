@@ -18,11 +18,15 @@
     <field name="arch" type="xml">
         <form>
             <group name="main">
-                <group string="Dates">
+                <group string="Dates and event data">
                     <field name="event_id" readonly="True"/>
                     <field name="event_date_begin" readonly="True"/>
                     <field name="event_date_end" readonly="True"/>
                     <field name="event_date_tz" readonly="True"/>
+                    <field name="name"/>
+                    <field name="location_id"/>
+                    <field name="speaker_ids" widget="many2many_tags"/>
+                    <field name="tag_ids" widget="many2many_tags"/>
                 </group>
                 <group string="Weekdays">
                     <field name="mondays"/>
@@ -39,7 +43,6 @@
                     <field name="end_time" widget="float_time"/>
                 </group>
                 <group string="Other options">
-                    <field name="name"/>
                     <field name="delete_existing_tracks"/>
                     <field name="publish_tracks_in_website"/>
                     <field name="adjust_start_time"/>
@@ -47,7 +50,7 @@
                 </group>
             </group>
             <footer>
-                <button name="generate_tracks"
+                <button name="action_generate"
                         type="object"
                         string="Generate tracks"
                         class="oe_highlight"/>
